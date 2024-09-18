@@ -60,13 +60,14 @@ operators.addEventListener('mouseup', (e) => {
     if (!operatorEntered){
         num1 = +displayValue;
         displayValue = ''
-    }else if(operator !== '=') {
+    }else if(operator !== '=' && displayValue !== '') {
         num2 = +displayValue;
         displayValue = '';
         result = handleOperation(operator);
         num1 = result;
         displayValue = result;
         display.textContent = displayValue;
+        operatorEntered = false;
     }
     displayValue = '';
     operator = e.target.textContent;
