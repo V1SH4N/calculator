@@ -13,71 +13,66 @@ function divide(num1, num2){
     }
     return num1/num2;
 }
+function initializeVariable(){
+    num1 = null;
+    num2 = null;
+    operator = null;
+    result = null;
+    displayValue = '';
+}
 function operate(operator, num1, num2){
     return operator(num1, num2);
 }
-
 function handleOperation(userOperator){
     switch (userOperator){
         case '+':
-            return operate(add, userNum1, userNum2);
+            return operate(add, num1, num2);
         case '-':
-            return operate(subtract, userNum1, userNum2);
+            return operate(subtract, num1, num2);
         case '×':
-            return operate(multiply, userNum1, userNum2);
+            return operate(multiply, num1, num2);
         case '÷':
-            return operate(divide, userNum1, userNum2);
+            return operate(divide, num1, num2);
     }
 }
-
-
-let displayValue = '';
 
 const display = document.querySelector('#display');
 const numbers = document.querySelector('#numbers');
 const operators = document.querySelector('#operators');
 
-let userNum1 = null;
-let userNum2 = null;
-let userOperator = null;
-let ans = null;
+let displayValue;
+let num1;
+let num2;
+let operator;
+let result;
+
+let operatorEntered = false;
+
+initializeVariable();
 
 numbers.addEventListener('mouseup', (e) => {
     displayValue += e.target.textContent;
     display.textContent = displayValue;
 })
 
+
 operators.addEventListener('mouseup', (e) => {
-
-    if (e.target.textContent === 'CLEAR'){
-        userNum1 = null;
-        userNum2 = null;
-        userOperator = null;
-        ans = null;
+    if (!operatorEntered){
+        num1 = +displayValue;
+        displayValue = ''
+    }else if(operator !== '=') {
+        num2 = +displayValue;
         displayValue = '';
-        display.textContent = '0';
-        return;
-    }
-
-    if (e.target.textContent !== '='){
-        userOperator = e.target.textContent;
-    }
-
-    if (userNum1 === null) {
-        userNum1 = +displayValue;
-    }else{
-        userNum2 = +displayValue;
-        ans = handleOperation(userOperator);
-        if (ans.toString().length > 12){
-            ans = ans.toString().substr(1,12);
-        }
-        userNum1 = +ans;
-        displayValue = ans;
+        result = handleOperation(operator);
+        num1 = result;
+        displayValue = result;
         display.textContent = displayValue;
     }
-
-    displayValue = ''; 
+    displayValue = '';
+    operator = e.target.textContent;
+    operatorEntered = true;
 })
+
 
 
 
