@@ -38,13 +38,19 @@ function resetVariables(){
     decimalEntered = false;
     display.textContent = '0';
 }
-
+function resetOpacity(){
+    let operatorsArray = [...operators.children];
+    operatorsArray.forEach(operator => {
+        operator.style.opacity = 1;
+    });
+}
 
 
 const display = document.querySelector('#display');
 const numbers = document.querySelector('#numbers');
 const operators = document.querySelector('#operators');
 
+const maxLength = 12;
 let displayValue;
 let num1;
 let num2;
@@ -60,7 +66,7 @@ numbers.addEventListener('mouseup', (e) => {
         if (decimalEntered) return;
         else decimalEntered = true;
     }
-    if (displayValue.length <= 13){
+    if (displayValue.length <= maxLength){
         displayValue += e.target.textContent;
         display.textContent = displayValue;
     }
@@ -74,9 +80,11 @@ operators.addEventListener('mouseup', (e) => {
     }
     if (e.target.textContent == '⌫'){
         displayValue = displayValue.substr(0, displayValue.length - 1);
+        if (displayValue === '') displayValue = '0';
         display.textContent = displayValue;
         return;
     }
+
     if (!operatorEntered && displayValue !== ''){
         num1 = +displayValue;
         decimalEntered = false;
@@ -86,16 +94,19 @@ operators.addEventListener('mouseup', (e) => {
         decimalEntered = false;
         displayValue = '';
         result = handleOperation(operator);
+        resetOpacity();
         num1 = result;
         displayValue = result.toString();
         if (displayValue.length >= 13){
-            displayValue = displayValue.slice(0, 13);
+            displayValue = displayValue.slice(0, maxLength);
         }
         display.textContent = displayValue;
         operatorEntered = false;
     }
+
     displayValue = '';
     if (e.target.textContent !== '='){
+        e.target.style.opacity = .5;
         operator = e.target.textContent;
         operatorEntered = true;
     }
